@@ -7,8 +7,8 @@ import "./DropZone.css";
 const missingFiles = (files: FileEntry[]): string[] => {
 	const expectedTypes = [
 		{
-			extensions: ["json"],
-			name: "json"
+			extensions: ["skel"],
+			name: "skel"
 		},
 		{
 			extensions: ["atlas"],
@@ -77,24 +77,27 @@ const DropZone: React.FC<DropZoneProps> = (props) => {
 				};
 
 				switch (extension) {
-					case "json":
-						reader.readAsText(file);
-						break;
-					case "atlas":
-						reader.readAsText(file);
-						break;
-					case "png":
-						reader.readAsDataURL(file);
-						break;
-					case "webp":
-						reader.readAsDataURL(file);
-						break;
-					case "jpg":
-						reader.readAsDataURL(file);
-						break;
-					default:
-						onError(`Unsopported file format: ${extension}`);
-				}
+                    case 'json':
+                        reader.readAsText(file);
+                        break;
+                    case 'skel':
+                        reader.readAsArrayBuffer(file);
+                        break;
+                    case 'atlas':
+                        reader.readAsText(file);
+                        break;
+                    case 'png':
+                        reader.readAsDataURL(file);
+                        break;
+                    case 'webp':
+                        reader.readAsDataURL(file);
+                        break;
+                    case 'jpg':
+                        reader.readAsDataURL(file);
+                        break;
+                    default:
+                        onError(`Unsopported file format: ${extension}`);
+                }
 			});
 		},
 		[onFilesLoaded, onError]

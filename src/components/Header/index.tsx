@@ -1,6 +1,7 @@
-import "./Header.css"
+import "./Header.css";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
+import DrawCall from "./DrawCall";
 
 const Header = () => {
 
@@ -8,6 +9,7 @@ const Header = () => {
         <header className="header">
             <div className="header__content-wrapper">
                 <Logo />
+                <DrawCall />
                 <ThemeToggle />
             </div>
         </header>

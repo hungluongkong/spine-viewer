@@ -7,7 +7,8 @@ import {
     ClippingAttachment,
     SkeletonBounds,
     PathAttachment,
-    Spine
+    Spine,
+    SkeletonBinary
 } from "@pixi-spine/all-3.8";
 
 import {
@@ -72,6 +73,8 @@ class PixiService {
     private initialSpinePosition: Point | null;
     private handlerRemovers: HandlerRemover<PixiServiceRemoveHandlers>[];
 
+    private drawCallElement: HTMLElement;
+
     constructor() {
         const spineClassesForDebug = {
             Spine,
@@ -96,6 +99,7 @@ class PixiService {
         this.initialPointerPosition = null;
         this.initialSpinePosition = null;
         this.handlerRemovers = [];
+        this.drawCallElement = document.getElementById("draw-call-debug") || document.createElement("div");
     }
 
     public init(): void {
@@ -193,7 +197,6 @@ class PixiService {
                 }
             }
         })
-
     }
 
     private onDebugOptionChange(debugOption: DebugOption): void {
@@ -246,10 +249,12 @@ class PixiService {
 
         if (this.appInitialized) return;
 
+        this.drawCallElement = document.getElementById("draw-call-debug") || document.createElement("div");
         const files = filesLoadedData.files;
         const rawJson = files.find((file) => file.type === "json")?.data;
+        const rawSkel = files.find((file) => file.type === "skel")?.data as ArrayBuffer;
         const rawAtlas = files.find((file) => file.type === "atlas")?.data;
-        const rawSkeletonData = JSON.parse(rawJson as string);
+        const rawSkeletonData =  rawSkel ? new Uint8Array(rawSkel) : JSON.parse(rawJson as string);
         const spineAtlas = new TextureAtlas(rawAtlas as string, function (
             line,
             callback
@@ -262,7 +267,7 @@ class PixiService {
         const spineAtlasLoader = new AtlasAttachmentLoader(
             spineAtlas
         );
-        const spineJsonParser = new SkeletonJson(spineAtlasLoader);
+        const spineJsonParser = new (rawSkel ? SkeletonBinary: SkeletonJson)(spineAtlasLoader);
         const spineData = spineJsonParser.readSkeletonData(rawSkeletonData);
         this.spine = new Spine(spineData);
 
@@ -304,6 +309,22 @@ class PixiService {
             animations: this.spine.spineData.animations.map(animation => animation.name),
             skins: this.spine.spineData.skins.map(skin => skin.name)
         });
+        let maxDrawCall = 0;
+        let drawCall = 0;
+        this.app.ticker.add((t) => {
+            maxDrawCall = Math.max(maxDrawCall, drawCall);
+            this.drawCallElement.innerHTML = `Draw Call: ${drawCall} - Max: ${maxDrawCall}`;
+            drawCall = 0;
+        });
+        const { renderer } = this.app;
+        // @ts-ignore
+        const { drawElements } = renderer.gl;
+        // @ts-ignore
+        renderer.gl.drawElements = (...args) => {
+        // @ts-ignore
+            drawElements.call(renderer.gl, ...args);
+            drawCall++;
+        };
     }
 
     private onScroll(event: WheelEvent) {

@@ -15,28 +15,36 @@ interface ActionBarProps { }
 
 const getCurrentPanel = (key: string): JSX.Element | null => {
 
-    switch (key) {
-        case "animations":
-            return <Animations />;
+    return <div>
+        <Animations />
+        <Skins />
+        <Timeline />
+        <Settings />
+        {/* <Mixins /> */}
+        <Debug />
+    </div>
+    // switch (key) {
+    //     case "animations":
+    //         return <Animations />;
 
-        case "skins":
-            return <Skins />;
+    //     case "skins":
+    //         return <Skins />;
 
-        case "debug":
-            return <Debug />;
+    //     case "debug":
+    //         return <Debug />;
 
-        case "mixins":
-            return <Mixins />;
+    //     case "mixins":
+    //         return <Mixins />;
 
-        case "timeline":
-            return <Timeline />;
+    //     case "timeline":
+    //         return <Timeline />;
 
-        case "settings":
-            return <Settings />;
+    //     case "settings":
+    //         return <Settings />;
 
-        default:
-            return null;
-    }
+    //     default:
+    //         return null;
+    // }
 }
 
 const ActionBar: React.FC<ActionBarProps> = () => {
