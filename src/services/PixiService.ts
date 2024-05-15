@@ -74,6 +74,7 @@ class PixiService {
     private handlerRemovers: HandlerRemover<PixiServiceRemoveHandlers>[];
 
     private drawCallElement: HTMLElement;
+    private coordinateAxises: Graphics;
 
     constructor() {
         const spineClassesForDebug = {
@@ -100,6 +101,7 @@ class PixiService {
         this.initialSpinePosition = null;
         this.handlerRemovers = [];
         this.drawCallElement = document.getElementById("draw-call-debug") || document.createElement("div");
+        this.coordinateAxises = new Graphics();
     }
 
     public init(): void {
@@ -283,6 +285,8 @@ class PixiService {
             height: window.innerHeight,
         });
         wrapper?.appendChild(this.app.view);
+        // @ts-ignore
+        globalThis.__PIXI_APP__ = this.app;
 
         this.background = new Sprite(Texture.WHITE);
 
@@ -297,6 +301,35 @@ class PixiService {
             .on("pointermove", this.onDragMove.bind(this));
 
         this.app.stage.addChild(this.background);
+
+        // add coordination axises (by graphic)
+        this.coordinateAxises.lineStyle(2, 0xff0000);
+        this.coordinateAxises.moveTo(-5000, 0);
+        this.coordinateAxises.lineTo(5000, 0);
+        this.coordinateAxises.lineStyle(2, 0x00ff00);
+        this.coordinateAxises.moveTo(0, -5000);
+        this.coordinateAxises.lineTo(0, 5000);
+        this.coordinateAxises.position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+        this.app.stage.addChild(this.coordinateAxises);
+
+        // const screen = {
+        //     baseWidth: 720,
+        //     baseHeight: 1280,
+        //     maxWidth: 720,
+        //     maxHeight: 1560
+        // };
+
+        // // draw screen base and screen max with thin lines
+        // const screenBase = new Graphics();
+        // screenBase.lineStyle(1, 0x000000);
+        // screenBase.drawRect(-screen.baseWidth / 2, -screen.baseHeight / 2, screen.baseWidth, screen.baseHeight);
+        // this.spine.addChild(screenBase);
+
+        // const screenMax = new Graphics();
+        // screenMax.lineStyle(1, 0x000000);
+        // screenMax.drawRect(-screen.maxWidth / 2, -screen.maxHeight / 2, screen.maxWidth, screen.maxHeight);
+        // this.spine.addChild(screenMax);
+
 
         this.spine.x = this.app.renderer.width / 2;
         this.spine.y = this.app.renderer.height / 2;
@@ -416,6 +449,7 @@ class PixiService {
 
             this.spine.x = this.initialSpinePosition.x + xDelta;
             this.spine.y = this.initialSpinePosition.y + yDelta;
+            this.coordinateAxises.position.set(this.spine.x, this.spine.y);
         }
     }
 
