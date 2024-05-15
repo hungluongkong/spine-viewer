@@ -12,7 +12,7 @@ const SettingsButton: React.FC<SettingsButtonProps> = ({ onClick }) => {
                 selected={false}
                 name="settings"
                 label="Settings"
-                icon="/assets/svg/settings.svg"
+                icon="./assets/svg/settings.svg"
                 onClick={onClick}
             />
         </div>

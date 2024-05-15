@@ -19,8 +19,8 @@ const ThemeToggle: React.FC = () => {
     return (
         <div onClick={handleOnClick} className="theme-toggle">
             <div className={`theme-toggle__ball ${themeClass}`}></div>
-            <img src="/assets/images/dark-mode.png" alt="dark mode icon" />
-            <img src="/assets/images/light-mode.png" alt="light mode icon" />
+            <img src="./assets/images/dark-mode.png" alt="dark mode icon" />
+            <img src="./assets/images/light-mode.png" alt="light mode icon" />
         </div>
     )
 };
