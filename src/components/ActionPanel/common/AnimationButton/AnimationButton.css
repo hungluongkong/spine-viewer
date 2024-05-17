@@ -11,6 +11,25 @@
     font-size: 16px;
 }
 
+.multi-tracks-animations-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    ::after {
+        /* draw a line */
+        content: "";
+        flex-grow: 1;
+        border-bottom: 1px solid #000;
+    }
+}
+
+.multi-tracks-animations-wrapper > .animation-button {
+    flex-grow: 1;
+    margin: 1px;
+    padding: 4px;
+    width: auto;
+    border: 2px solid bisque;
+}
+
 .animation-button:hover {
     filter: brightness(80%);
     cursor: pointer;

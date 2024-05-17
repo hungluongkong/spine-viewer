@@ -6,19 +6,24 @@ import "./AnimationButton.css";
 
 interface AnimationButtonProps {
     label: string;
-    onClick: () => void
+    onClick: () => void,
+    short?: boolean;
+    selected?: boolean;
 }
 
-const AnimationButton: React.FC<AnimationButtonProps> = ({ label, onClick }) => {
+const AnimationButton: React.FC<AnimationButtonProps> = ({ label, onClick, short, selected }) => {
 
     const handleCopyClick = () => {
         copyToClipboard(label);
         toast(`Copied to clipboard: ${label}`, copyToast);
     };
+    const classNames = `animation-button ${selected ? 'selected' : ''}`;
 
     return (
-        <div className="animation-button-wrapper">
-            <Button className="animation-button" label={label} onClick={onClick} />
+        short
+        ? <Button className={classNames} label={label} onClick={onClick} />
+        : <div className="animation-button-wrapper">
+            <Button className={classNames} label={label} onClick={onClick} />
             <span onClick={handleCopyClick} className="animation-copy">
                 <img src="./assets/images/copy_small.png" alt="copy animation" />
             </span>

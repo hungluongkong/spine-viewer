@@ -60,6 +60,7 @@ export interface SpineData {
 export interface AnimationPlayData {
     animation: string;
     loop: boolean;
+    track?: number;
 }
 
 export interface TimelineEntry {

@@ -13,27 +13,9 @@ const actionMenuConfig: ActionMenuConfigItem[] = [
         visible: true
     },
     {
-        icon: "./assets/svg/skins.svg",
-        name: "skins",
-        label: "Skins",
-        visible: true
-    },
-    {
-        icon: "./assets/svg/debug.svg",
-        name: "debug",
-        label: "Debug",
-        visible: true
-    },
-    {
-        icon: "./assets/images/play-grey.png",
-        name: "mixins",
-        label: "Mixins",
-        visible: false
-    },
-    {
         icon: "./assets/svg/timeline.svg",
-        name: "timeline",
-        label: "Timeline",
+        name: "multiTrack",
+        label: "MultiTrack",
         visible: true
     },
     {

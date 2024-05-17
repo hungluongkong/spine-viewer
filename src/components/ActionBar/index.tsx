@@ -3,6 +3,7 @@ import ActionPanel from "../ActionPanel";
 import Animations from "../ActionPanel/Animations";
 import Debug from "../ActionPanel/Debug";
 import Mixins from "../ActionPanel/Mixins";
+import MultiTrack from "../ActionPanel/MultiTrack";
 import Settings from "../ActionPanel/Settings";
 import Skins from "../ActionPanel/Skins";
 import Timeline from "../ActionPanel/Timeline";
@@ -14,15 +15,21 @@ import SettingsButton from "./SettingsButton";
 interface ActionBarProps { }
 
 const getCurrentPanel = (key: string): JSX.Element | null => {
-
-    return <div>
-        <Animations />
-        <Skins />
-        <Timeline />
-        <Settings />
-        {/* <Mixins /> */}
-        <Debug />
-    </div>
+    switch (key) {
+        case "multiTrack":
+            return <MultiTrack />;
+        default:
+            return (
+                <div>
+                    <Animations />
+                    <Skins />
+                    <Timeline />
+                    <Settings />
+                    {/* <Mixins /> */}
+                    <Debug />
+                </div>
+            );
+    }
     // switch (key) {
     //     case "animations":
     //         return <Animations />;

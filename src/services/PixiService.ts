@@ -152,15 +152,17 @@ class PixiService {
     }
 
     private onStartAnimation(animationData: AnimationPlayData): void {
-        this.spine?.state.clearTrack(0);
+        this.spine?.state.clearTrack(animationData.track || 0);
         this.spine?.state.clearListeners();
         this.spine?.skeleton.setToSetupPose();
-        this.spine?.state.setAnimation(0, animationData.animation, animationData.loop);
-        this.spine?.state.addListener({
-            event: (_, event) => {
-                events.dispatchers.spineEvent(event.data.name);
-            }
-        })
+        if (animationData.animation) {
+            this.spine?.state.setAnimation(animationData.track || 0, animationData.animation, animationData.loop);
+            this.spine?.state.addListener({
+                event: (_, event) => {
+                    events.dispatchers.spineEvent(event.data.name);
+                }
+            })
+        }
     }
 
     private onSkinChange(skin: string): void {
