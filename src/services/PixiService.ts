@@ -50,7 +50,9 @@ enum PixiServiceRemoveHandlers {
     ON_START_ANIMATION,
     ON_SKIN_CHANGED,
     ON_SET_MIXIN,
+    ON_SET_DEFAULT_MIXIN,
     ON_SET_CANVAS_BACKGROUND,
+    ON_SET_SCREEN_VISIBLE,
     ON_TIMELINE_PLAY,
     ON_DEBUG_OPTION_CHANGED,
     ON_SETUP_POSE,
@@ -75,6 +77,8 @@ class PixiService {
 
     private drawCallElement: HTMLElement;
     private coordinateAxises: Graphics;
+
+    private screens: Graphics[];
 
     constructor() {
         const spineClassesForDebug = {
@@ -102,6 +106,7 @@ class PixiService {
         this.handlerRemovers = [];
         this.drawCallElement = document.getElementById("draw-call-debug") || document.createElement("div");
         this.coordinateAxises = new Graphics();
+        this.screens = [];
     }
 
     public init(): void {
@@ -118,8 +123,16 @@ class PixiService {
             removeHandler: events.handlers.onSetMixin(this.onSetMixin.bind(this))
         });
         this.handlerRemovers.push({
+            name: PixiServiceRemoveHandlers.ON_SET_DEFAULT_MIXIN,
+            removeHandler: events.handlers.onSetDefaultMixin(this.onSetDefaultMixin.bind(this))
+        });
+        this.handlerRemovers.push({
             name: PixiServiceRemoveHandlers.ON_SET_CANVAS_BACKGROUND,
             removeHandler: events.handlers.onSetCanvasBackground(this.onSetCanvasBackground.bind(this))
+        });
+        this.handlerRemovers.push({
+            name: PixiServiceRemoveHandlers.ON_SET_SCREEN_VISIBLE,
+            removeHandler: events.handlers.onSetScreenVisible(this.onSetScreenVisible.bind(this))
         });
         this.handlerRemovers.push({
             name: PixiServiceRemoveHandlers.ON_TIMELINE_PLAY,
@@ -173,10 +186,22 @@ class PixiService {
         this.spine?.stateData.setMix(mixin.fromAnim, mixin.toAnim, mixin.duration);
     }
 
+    private onSetDefaultMixin(mixin: number): void {
+        if (this.spine) {
+            this.spine.stateData.defaultMix = mixin;
+        }
+    }
+
     private onSetCanvasBackground(background: string): void {
         if (this.background) {
             this.background.tint = hexStringToNumber(background);
         }
+    }
+
+    private onSetScreenVisible(visible: boolean): void {
+        this.screens.forEach(screen => {
+            screen.visible = visible;
+        });
     }
 
     private onTimelinePlay(timeline: string[]): void {
@@ -314,23 +339,27 @@ class PixiService {
         this.coordinateAxises.position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
         this.app.stage.addChild(this.coordinateAxises);
 
-        // const screen = {
-        //     baseWidth: 720,
-        //     baseHeight: 1280,
-        //     maxWidth: 720,
-        //     maxHeight: 1560
-        // };
+        const screen = {
+            baseWidth: 720,
+            baseHeight: 1280,
+            maxWidth: 720,
+            maxHeight: 1560
+        };
 
-        // // draw screen base and screen max with thin lines
-        // const screenBase = new Graphics();
-        // screenBase.lineStyle(1, 0x000000);
-        // screenBase.drawRect(-screen.baseWidth / 2, -screen.baseHeight / 2, screen.baseWidth, screen.baseHeight);
-        // this.spine.addChild(screenBase);
+        // draw screen base and screen max with thin lines
+        const screenBase = new Graphics();
+        screenBase.lineStyle(0.5, 0xea9afc);
+        screenBase.drawRect(-screen.baseWidth / 2, -screen.baseHeight / 2, screen.baseWidth, screen.baseHeight);
+        this.spine.addChild(screenBase);
 
-        // const screenMax = new Graphics();
-        // screenMax.lineStyle(1, 0x000000);
-        // screenMax.drawRect(-screen.maxWidth / 2, -screen.maxHeight / 2, screen.maxWidth, screen.maxHeight);
-        // this.spine.addChild(screenMax);
+        const screenMax = new Graphics();
+        screenMax.lineStyle(0.5, 0x98f542);
+        screenMax.drawRect(-screen.maxWidth / 2, -screen.maxHeight / 2, screen.maxWidth, screen.maxHeight);
+        this.spine.addChild(screenMax);
+
+        this.screens.push(screenBase);
+        this.screens.push(screenMax);
+        // this.onSetScreenVisible(false);
 
 
         this.spine.x = this.app.renderer.width / 2;

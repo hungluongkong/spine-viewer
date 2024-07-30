@@ -45,8 +45,12 @@ const SpineLoader = () => {
     return (
         <div className="spine-loader">
             <LoadDefaultSpinButton onClick={handleDefaultSpineLoad} />
-            <SpineLoaderInfoText text="Or load a spine export (png, json and atlas files) in the box below" />
+            <SpineLoaderInfoText text="Chọn tất cả các file (skel/json , atlas, png & jpg) của spine" />
             <DropZone onFilesLoaded={onFilesLoaded} onError={onLoadError} onStartLoadingFiles={onStartLoadingFiles} />
+            <div className="tutorial-popup">
+                <h2 className="spine-loader-info-text">Hướng Dẫn:</h2>
+                <img src="./assets/images/ex.png" alt="tutorial" />
+            </div>
         </div>
     )
 };

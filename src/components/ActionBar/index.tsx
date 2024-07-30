@@ -25,7 +25,7 @@ const getCurrentPanel = (key: string): JSX.Element | null => {
                     <Skins />
                     <Timeline />
                     <Settings />
-                    {/* <Mixins /> */}
+                    <Mixins />
                     <Debug />
                 </div>
             );

@@ -114,7 +114,7 @@ const DropZone: React.FC<DropZoneProps> = (props) => {
 			{isDragActive ? (
 				<p>Drop the files here ...</p>
 			) : (
-				<p>Drag and drop files here, or click to select files</p>
+				<p>Click để chọn files. Hoặc kéo thả tất cả vào ô này.</p>
 			)}
 		</div>
 	);

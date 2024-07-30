@@ -5,3 +5,9 @@
     align-items: center;
     max-width: var(--content-width);
 }
+
+.tutorial-popup {
+    border: 1px solid #00ffff;
+    border-radius: 2%;
+    padding: 0.5%;
+}

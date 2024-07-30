@@ -12,6 +12,7 @@ import { SpineData } from './interfaces';
 import "react-toastify/dist/ReactToastify.css";
 import Reset from './components/Reset';
 import { spineEventToast } from './config/toastsConfig';
+import { onSetScreenVisible } from './events/handlers/onScreenVisiblechange';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
     initAsyncData: store.initAsyncData
   }));
 
+  const screenVisible = useSettingsStore(store => store.screenVisible);
   const canvasBackground = useSettingsStore(store => store.canvasBackground);
   const hasLoadedFiles = useMemo(() => loadedFiles.length > 0, [loadedFiles]);
 
@@ -49,6 +51,10 @@ function App() {
   useEffect(() => {
     events.dispatchers.setCanvasBackground(canvasBackground);
   }, [canvasBackground]);
+
+  useEffect(() => {
+    events.dispatchers.screenVisibleChange(screenVisible);
+  }, [screenVisible]);
 
   useEffect(() => {
     const removeSpineCreatedListener = events.handlers.onSpineCreated((spineData: SpineData) => {

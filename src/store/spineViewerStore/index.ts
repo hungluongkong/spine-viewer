@@ -18,6 +18,7 @@ export interface SpineViewerStore {
     mixins: SpineMixin[];
     loopAnimations: boolean;
     timeScale: number;
+    defaultMixins: number;
 }
 
 export interface SpineViewerActions {
@@ -25,6 +26,7 @@ export interface SpineViewerActions {
     setSpineStateProperty: <T>(key: string, stateProp: T) => void;
     setAnimations: (animations: string[]) => void;
     setMixins: (mixins: SpineMixin[]) => void;
+    setDefaultMixins: (mixins: number) => void;
     setTimeline: (timeline: TimelineEntry[]) => void;
     setDebugOptions: (debugOptions: DebugConfigOption[]) => void;
     setFilesLoading: (filesLoading: boolean) => void;
@@ -38,20 +40,21 @@ export interface SpineViewerActions {
 
 const initialState: SpineViewerStore = {
     actionMenuItems: actionMenuConfig,
-    selectedActionMenuItem: null,
+    selectedActionMenuItem: actionMenuConfig[0],
     filesLoading: false,
     loadedFiles: [],
     timeline: [],
     mixins: [],
     animations: [],
     skins: [],
-    loopAnimations: false,
+    loopAnimations: true,
     timeScale: 1,
     debugOptions: (() => {
         return debugConfig.debugOptions.map(option => {
             return { ...option };
         })
-    })()
+    })(),
+    defaultMixins: 0.0
 }
 
 export const useSpineViewerStore = create<SpineViewerStore & SpineViewerActions>()(
@@ -122,6 +125,9 @@ export const useSpineViewerStore = create<SpineViewerStore & SpineViewerActions>
                     }));
                 })
             }
+        },
+        setDefaultMixins: (mixins: number) => {
+            set(_ => ({defaultMixins: mixins}))
         }
     }))
 );

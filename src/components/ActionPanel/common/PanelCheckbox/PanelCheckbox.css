@@ -8,3 +8,6 @@
 .action-panel__checkbox span {
     color: var(--text-color);
 }
+.mixin-label {
+    color: var(--text-color);
+}
