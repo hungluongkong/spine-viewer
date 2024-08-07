@@ -18,7 +18,7 @@ export const useSettingsStore = create<SettingsStore & SettingsStoreActions>()(
         persist((set) => ({
             theme: "dark",
             canvasBackground: "#e4eaf0",
-            screenVisible: true,
+            screenVisible: false,
             setTheme: (theme) => set((_) => ({ theme })),
             setCanvasBackground: (canvasBackground) => set((_) => ({ canvasBackground })),
             setScreenVisible: (screenVisible) => set((_) => ({ screenVisible }))

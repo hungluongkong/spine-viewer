@@ -202,6 +202,9 @@ class PixiService {
         this.screens.forEach(screen => {
             screen.visible = visible;
         });
+        if (this.background) {
+            this.background.visible = visible;
+        }
     }
 
     private onTimelinePlay(timeline: string[]): void {
@@ -306,7 +309,7 @@ class PixiService {
         const wrapper = document.getElementById("canvas-wrapper");
 
         this.app = new Application({
-            backgroundColor: hexStringToNumber(filesLoadedData.canvasBackground),
+            backgroundColor: hexStringToNumber(filesLoadedData.canvasBackground) || 0x8701B6,
             antialias: true,
             width: window.innerWidth,
             height: window.innerHeight,
@@ -330,10 +333,10 @@ class PixiService {
         this.app.stage.addChild(this.background);
 
         // add coordination axises (by graphic)
-        this.coordinateAxises.lineStyle(2, 0xff0000);
+        this.coordinateAxises.lineStyle(1, 0xff0000);
         this.coordinateAxises.moveTo(-5000, 0);
         this.coordinateAxises.lineTo(5000, 0);
-        this.coordinateAxises.lineStyle(2, 0x00ff00);
+        this.coordinateAxises.lineStyle(1, 0x00ff00);
         this.coordinateAxises.moveTo(0, -5000);
         this.coordinateAxises.lineTo(0, 5000);
         this.coordinateAxises.position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
@@ -359,7 +362,8 @@ class PixiService {
 
         this.screens.push(screenBase);
         this.screens.push(screenMax);
-        // this.onSetScreenVisible(false);
+        this.screens.push(this.coordinateAxises);
+        this.onSetScreenVisible(false);
 
 
         this.spine.x = this.app.renderer.width / 2;
